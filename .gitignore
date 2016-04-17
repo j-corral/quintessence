@@ -2,14 +2,12 @@
 .idea/
 composer.lock
 
-# Dossier de configuration
-app/config/
 
-# Sauf fichier de configuration exemple
-!app/config/config.sample.php
+# fichier de configuration
+app/config/config.php
 
-# Sauf fichier de configuration exemple usersDB
-!app/config/usersDB/users.config.sample.php
+# fichier de configuration usersDB
+app/config/usersDB/users.config.php
 
 # Dossier vendor
 vendor/
