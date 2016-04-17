@@ -1,0 +1,150 @@
+{% extends _layout %}
+
+{% block title %} Articles{% endblock %}
+
+{% block content %}
+    <h2>Liste des articles</h2>
+
+    {{ material_pagination('admin.articles.index', page, nbPages, 'blue') }}
+    <form action="{{ url('admin.articles.deleteselection') }}" method="post">
+        <div class="row">
+            <div class="col s12">
+                <div id="index">
+
+                    <table class="table responsive-table centered table-hover striped">
+                        <thead>
+                        <tr>
+                            <th data-field="id">Id
+                                <a href="{{ url('admin.articles.index', [page], ['perPage']) }}" class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier 0-9">
+                                    <i class="material-icons">keyboard_arrow_up</i>
+                                </a>
+                                <a href="{{ url('admin.articles.index', [page,'?orderby=id-desc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier 9-0">
+                                    <i class="material-icons">keyboard_arrow_down</i>
+                                </a>
+                            </th>
+                            <th data-field="titre">Titre
+                                <a href="{{ url('admin.articles.index', [page,'?orderby=title-asc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier A-Z">
+                                    <i class="material-icons">keyboard_arrow_up</i>
+                                </a>
+                                <a href="{{ url('admin.articles.index', [page,'?orderby=title-desc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier Z-A">
+                                    <i class="material-icons">keyboard_arrow_down</i>
+                                </a>
+                            </th>
+                            <th data-field="intro">Intro
+                                <a href="{{ url('admin.articles.index', [page,'?orderby=content-asc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier A-Z">
+                                    <i class="material-icons">keyboard_arrow_up</i>
+                                </a>
+                                <a href="{{ url('admin.articles.index', [page,'?orderby=content-desc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier Z-A">
+                                    <i class="material-icons">keyboard_arrow_down</i>
+                                </a>
+                            </th>
+                            {% if hasAccess('articles.read') or hasAccess('articles.update') or hasAccess('articles.delete') %}
+                                <th data-field="action">Action</th>
+                            {% endif %}
+                            {% if hasAccess('articles.delete') %}
+                                <th data-field="selection">Sélection
+                                    <i class="material-icons">done_all</i>
+                                    <i class="material-icons">crop_square</i>
+                                </th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for article in articles %}
+                            <tr>
+                                <td>{{ article.id }}</td>
+                                <td>{{ article.title|slice(0, 20) }}</td>
+                                <td>{{ article.content|slice(0, 25) }}</td>
+                                {% if hasAccess('articles.read') or hasAccess('articles.update') or hasAccess('articles.delete') %}
+                                    <td>
+                                        {% if hasAccess('articles.read') %}
+                                            <a href="{{ url('admin.articles.read', [article.id]) }}" class="tooltipped"
+                                               data-position="top" data-delay="150" data-tooltip="Voir">
+                                                <i class="material-icons">visibility</i>
+                                            </a>
+                                        {% endif %}
+                                        {% if hasAccess('articles.update') %}
+                                            <a href="{{ url('admin.articles.update', [article.id]) }}"
+                                               class="tooltipped"
+                                               data-position="top" data-delay="150" data-tooltip="Editer">
+                                                <i class="material-icons">create</i>
+                                            </a>
+                                        {% endif %}
+                                        {% if hasAccess('articles.delete') %}
+                                            <a href="{{ url('admin.articles.delete', [article.id]) }}"
+                                               class="tooltipped"
+                                               data-position="top" data-delay="150" data-tooltip="Supprimer">
+                                                <i class="material-icons">delete</i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                                {% if hasAccess('articles.delete') %}
+                                    <td>
+                                        <input type="checkbox" name="data[delete][]" value="{{ article.id }}"
+                                               class="filled-in" id="{{ article.id }}"/>
+                                        <label for="{{ article.id }}"></label>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <a class="right">
+                <p>Total : {{ total }} </p>
+            </a>
+        </div>
+
+
+        {% if hasAccess('articles.create') or hasAccess('articles.delete') or hasAccess('newspapers.index') %}
+            <div class="fixed-action-btn vertical" style="bottom: 45px; right: 24px;">
+                <a class="btn-floating btn-large blue-grey">
+                    <i class="material-icons">menu</i>
+                </a>
+                <ul>
+                    {% if hasAccess('articles.create') %}
+                        <li>
+                            <a href="{{ url('admin.articles.create') }}" class="btn-floating btn-large tooltipped blue"
+                               data-position="left" data-delay="150" data-tooltip="Ajouter un article">
+                                <i class="material-icons">add</i></a>
+                        </li>
+                    {% endif %}
+                    {% if hasAccess('newspapers.index') %}
+                        <li>
+                            <a href="{{ url('admin.newspapers.index', ['1']) }}"
+                               class="btn-floating btn-large tooltipped blue"
+                               data-position="left" data-delay="150" data-tooltip="Liste des dates des journaux">
+                                <i class="material-icons">view_list</i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if hasAccess('articles.delete') %}
+                        <li>
+                            <input type="submit" class="btn-floating btn-large tooltipped blue material-icons"
+                                   data-position="left" data-delay="150"
+                                   data-tooltip="Supprimer tous les éléments sélectionnés"
+                                   value='delete'
+                            />
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+    </form>
+
+
+
+{% endblock %}

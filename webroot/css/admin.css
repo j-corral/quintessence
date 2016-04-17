@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+#slide-out li:hover{
+	background-color: #039BE5 !important;
+}
+
+#slide-out li.active{
+	background-color: #212121 !important;
+}
+
+.side-link:hover {
+	color: #fff;
+}
+
+.add-btn {
+	bottom: 80px;
+	right: 40px;
+}

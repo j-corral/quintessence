@@ -1,0 +1,18 @@
+# Configuration jetbrain
+.idea/
+composer.lock
+
+# Dossier de configuration
+app/config/
+
+# Sauf fichier de configuration exemple
+!app/config/config.sample.php
+
+# Sauf fichier de configuration exemple usersDB
+!app/config/usersDB/users.config.sample.php
+
+# Dossier vendor
+vendor/
+
+# Dossier de fichiers temporaires
+tmp/

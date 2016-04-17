@@ -1,0 +1,119 @@
+{% extends _layout %}
+
+    {% block title %} Newspapers{% endblock %}
+
+    {% block content %}
+        <h2>Liste des dates du journal</h2>
+
+        {{ material_pagination('admin.newspapers.index', page, nbPages, 'blue') }}
+
+        <form action="{{ url('admin.newspapers.deleteSelection') }}" method="post">
+            <div class="row">
+                <div class="col s12">
+                    <div id="index">
+
+                        <table class="table responsive-table centered table-hover striped">
+                            <thead>
+                            <tr>
+                                <th data-field="action">Id
+                                    <a href="{{ url('admin.newspapers.index', [page], ['perPage']) }}"
+                                       class="tooltipped"
+                                       data-position="top" data-delay="150" data-tooltip="Trier 0-9">
+                                        <i class="material-icons">keyboard_arrow_up</i>
+                                    </a>
+                                    <a href="{{ url('admin.newspapers.index', [page,'?orderby=id-desc'], ['perPage']) }}"
+                                       class="tooltipped"
+                                       data-position="top" data-delay="150" data-tooltip="Trier 9-0">
+                                        <i class="material-icons">keyboard_arrow_down</i>
+                                    </a>
+                                </th>
+                                <th data-field="action">Date
+                                    <a href="{{ url('admin.newspapers.index', [page,'?orderby=date-asc'], ['perPage']) }}"
+                                       class="tooltipped"
+                                       data-position="top" data-delay="150" data-tooltip="Trier 0-9">
+                                        <i class="material-icons">keyboard_arrow_up</i>
+                                    </a>
+                                    <a href="{{ url('admin.newspapers.index', [page,'?orderby=date-desc'], ['perPage']) }}"
+                                       class="tooltipped"
+                                       data-position="top" data-delay="150" data-tooltip="Trier 9-0">
+                                        <i class="material-icons">keyboard_arrow_down</i>
+                                    </a>
+                                </th>
+                                {% if hasAccess('newspapers.read') or hasAccess('newspapers.update') or hasAccess('newspapers.delete') %}
+                                    <th data-field="action">Action</th>
+                                {% endif %}
+                                {% if hasAccess('newspapers.delete') %}
+                                    <th data-field="action">Sélection
+                                        <i class="material-icons">done_all</i>
+                                        <i class="material-icons">crop_square</i>
+                                    </th>
+                                {% endif %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for newspaper in newspapers %}
+                                <tr>
+                                    <td>{{ newspaper.id }}</td>
+                                    <td>{{ newspaper.date }}</td>
+                                    {% if hasAccess('newspapers.read') or hasAccess('newspapers.update') or hasAccess('newspapers.delete') %}
+                                        <td>
+                                            {% if hasAccess('newspapers.read') %}
+                                                <a href="{{ url('admin.newspapers.read', [newspaper.id]) }}"
+                                                   class="tooltipped"
+                                                   data-position="top" data-delay="150" data-tooltip="Voir">
+                                                    <i class="material-icons">visibility</i>
+                                                </a>
+                                            {% endif %}
+                                            {% if hasAccess('newspapers.update') %}
+                                                <a href="{{ url('admin.newspapers.update', [newspaper.id]) }}"
+                                                   class="tooltipped" data-position="top" data-delay="150"
+                                                   data-tooltip="Editer">
+                                                    <i class="material-icons">create</i>
+                                                </a>
+                                            {% endif %}
+                                            {% if hasAccess('newspapers.delete') %}
+                                                <a href="{{ url('admin.newspapers.delete', [newspaper.id]) }}"
+                                                   class="tooltipped" data-position="top" data-delay="150"
+                                                   data-tooltip="Supprimer">
+                                                    <i class="material-icons">delete</i>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    {% endif %}
+                                    {% if hasAccess('newspapers.delete') %}
+                                        <td>
+                                            <input type="checkbox" name="data[delete][]" value="{{ newspaper.id }}"
+                                                   class="filled-in" id="{{ newspaper.id }}"/>
+                                            <label for="{{ newspaper.id }}"></label>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <a class="right">
+                    <p>Total : {{ total }} </p>
+                </a>
+            </div>
+
+            {% if hasAccess('newspapers.create') or  hasAccess('newspapers.delete') %}
+                <div class="fixed-action-btn add-btns">
+                    {% if hasAccess('newspapers.create') %}
+                        <a href="{{ url('admin.newspapers.create') }}" class="btn-floating btn-large tooltipped blue"
+                           data-position="left" data-delay="150" data-tooltip="Ajouter un journal">
+                            <i class="large material-icons">add</i>
+                        </a>
+                    {% endif %}
+                    {% if hasAccess('newspapers.delete') %}
+                        <input type="submit" class="btn-floating btn-large tooltipped blue material-icons"
+                               data-position="left" data-delay="150"
+                               data-tooltip="Supprimer tous les éléments sélectionnés"
+                               value='delete'
+                        />
+                    {% endif %}
+                </div>
+            {% endif %}
+        </form>
+    {% endblock %}

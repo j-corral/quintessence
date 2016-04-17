@@ -1,0 +1,15 @@
+# Empêche de lister le contenu des dossiers
+Options -Indexes
+
+## Empêche l'accès aux fichiers .php sauf index.php
+# <Files ~ "^index\.php$">
+#  Order Allow,Deny
+#  Deny from All
+# </Files>
+
+
+# Url Rewriting
+#Options +FollowSymLinks
+RewriteEngine On # Activation de l'url rewriting
+
+RewriteRule ^([a-zA-Z0-9\-\_\/]+)$ index.php?p=$1 [QSA,L]

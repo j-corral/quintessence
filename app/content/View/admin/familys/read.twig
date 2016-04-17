@@ -1,0 +1,42 @@
+{% extends _layout %}
+
+{% block title %}item family - {{ family.description }}{% endblock %}
+
+{% block content %}
+
+
+
+
+    <div class="col s12 m8 offset-m2 l6 offset-l3 ">
+        <div class="card-panel grey lighten-5 z-depth-1 flow-text">
+            <div class="col s10">
+                Information d'un item de famille
+            </div>
+
+            <div class="col s10">
+                <div class="chip">
+                    Description : {{ family.description }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    {% if hasAccess('familys.update') or hasAccess('familys.delete') %}
+        <div class="fixed-action-btn">
+            {% if hasAccess('familys.update') %}
+                <a href="{{ url('admin.familys.update', [family.id]) }}" class="btn-floating btn-large tooltipped blue"
+                   data-position="top" data-delay="150" data-tooltip="Editer">
+                    <i class="large material-icons">edit</i>
+                </a>
+            {% endif %}
+            {% if hasAccess('familys.delete') %}
+                <a href="{{ url('admin.familys.delete', [family.id]) }}" class="btn-floating btn-large tooltipped blue"
+                   data-position="top" data-delay="150" data-tooltip="Supprimer">
+                    <i class="large material-icons">delete</i>
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends _layout %}
+
+{% block title %}User - {{ user.pseudo }}{% endblock %}
+
+{% block content %}
+
+
+    <div class="col s12 m8 offset-m2 l6 offset-l3 ">
+        <div class="card-panel grey lighten-5 z-depth-1 flow-text">
+            <div class="col s10">
+                Information utilisateur :
+            </div>
+            <div class="chip ">
+                <img src="http://codecanyon.sangvish.com/wp-content/themes/codecanyon/images/default-user.jpg"
+                     alt="Contact Person">
+                User - {{ user.pseudo }}
+            </div>
+            <div class="col s10">
+                <div class="chip">
+                    <i class="material-icons left">email</i> {{ user.email }}
+                </div>
+            </div>
+            <div class="col s10">
+                <div class="chip">
+                    <i class="material-icons left">phone</i> {{ user.phone }}
+                </div>
+            </div>
+            <div class="col s10">
+                <div class="chip">
+                    <i class="material-icons left">perm_identity</i> {% if user.gender == 1 %}M.{% else %} Mme. {% endif %} {{ user.lastname }} {{ user.firstname }}
+                </div>
+            </div>
+            <div class="col s10">
+                <div class="chip">
+                    <i class="material-icons left">redeem</i> {{ user.birth_date }}
+                </div>
+            </div>
+            <div class="col s10">
+                <div class="chip">
+                    <i class="material-icons left">settings</i> {{ user.description }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col s12 m8 offset-m2 l6 offset-l3 ">
+        <div class="card-panel grey lighten-5 z-depth-1 flow-text">
+            <div class="col s10">
+                Informations autres :
+            </div>
+            <div class="col s10">
+                <div class="chip">
+                    <i class="material-icons left">web</i> {{ user.website }}
+                </div>
+            </div>
+            <div class="col s10">
+                <div class="chip">
+                    L'adresse ip : {{ user.ip_address }}
+                </div>
+            </div>
+            <div class="col s10">
+                <div class="chip">
+                    Date de l'inscription : {{ user.registration_date }}
+                </div>
+            </div>
+            <div class="col s10">
+                <div class="chip">
+                    Dernière connexion : {{ user.last_login }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    {% if hasAccess('users.update') or hasAccess('users.delete') %}
+        <div class="fixed-action-btn">
+            {% if hasAccess('users.update') %}
+                <a href="{{ url('admin.users.update', [user.id]) }}" class="btn-floating btn-large tooltipped blue"
+                   data-position="top" data-delay="150" data-tooltip="Editer">
+                    <i class="large material-icons">edit</i>
+                </a>
+            {% endif %}
+            {% if hasAccess('users.delete') %}
+                <a href="{{ url('admin.users.delete', [user.id]) }}" class="btn-floating btn-large tooltipped blue"
+                   data-position="top" data-delay="150" data-tooltip="Supprimer">
+                    <i class="large material-icons">delete</i>
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

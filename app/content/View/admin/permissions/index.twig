@@ -1,0 +1,142 @@
+{% extends _layout %}
+
+{% block title %} Permissions{% endblock %}
+
+{% block content %}
+    <h2>Liste des permissions</h2>
+
+    {{ material_pagination('admin.permissions.index', page, nbPages, 'blue') }}
+
+    <form action="{{ url('admin.permissions.deleteSelection') }}" method="post">
+        <div class="row">
+            <div class="col s12">
+                <div id="index">
+
+                    <table class="table responsive-table centered table-hover striped">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Id
+                                <a href="{{ url('admin.permissions.index', [page], ['perPage']) }}" class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier 0-9">
+                                    <i class="material-icons">keyboard_arrow_up</i>
+                                </a>
+                                <a href="{{ url('admin.permissions.index', [page,'?orderby=id-desc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier 9-0">
+                                    <i class="material-icons">keyboard_arrow_down</i>
+                                </a>
+                            </th>
+                            <th class="text-center">Auth Id
+                                <a href="{{ url('admin.permissions.index', [page,'?orderby=auth_id-asc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier 0-9">
+                                    <i class="material-icons">keyboard_arrow_up</i>
+                                </a>
+                                <a href="{{ url('admin.permissions.index', [page,'?orderby=auth_id-desc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier 9-0">
+                                    <i class="material-icons">keyboard_arrow_down</i>
+                                </a>
+                            </th>
+                            <th class="text-center">Permission
+                                <a href="{{ url('admin.permissions.index', [page,'?orderby=permission-asc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier A-Z">
+                                    <i class="material-icons">keyboard_arrow_up</i>
+                                </a>
+                                <a href="{{ url('admin.permissions.index', [page,'?orderby=permission-desc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier Z-A">
+                                    <i class="material-icons">keyboard_arrow_down</i>
+                                </a>
+                            </th>
+                            {% if hasAccess('permissions.read') or hasAccess('permissions.update') or hasAccess('permissions.delete') %}
+                                <th data-field="action">Action</th>
+                            {% endif %}
+                            {% if hasAccess('permissions.delete') %}
+                                <th data-field="action">Sélection
+                                    <i class="material-icons">done_all</i>
+                                    <i class="material-icons">crop_square</i>
+                                </th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for permission in permissions %}
+                            <tr>
+                                <td>{{ permission.id }}</td>
+                                <td>{{ permission.auth_id }}</td>
+                                <td class="left">{{ permission.permission }}</td>
+                                {% if hasAccess('permissions.read') or hasAccess('permissions.update') or hasAccess('permissions.delete') %}
+                                    <td>
+                                        {% if hasAccess('permissions.read') %}
+                                            <a href="{{ url('admin.permissions.read', [permission.id]) }}"
+                                               class="tooltipped"
+                                               data-position="top" data-delay="150" data-tooltip="Voir">
+                                                <i class="material-icons">visibility</i>
+                                            </a>
+                                        {% endif %}
+                                        {% if hasAccess('permissions.update') %}
+                                            <a href="{{ url('admin.permissions.update', [permission.id]) }}"
+                                               class="tooltipped"
+                                               data-position="top" data-delay="150" data-tooltip="Editer">
+                                                <i class="material-icons">create</i>
+                                            </a>
+                                        {% endif %}
+                                        {% if hasAccess('permissions.delete') %}
+                                            <a href="{{ url('admin.permissions.delete', [permission.id]) }}"
+                                               class="tooltipped"
+                                               data-position="top" data-delay="150" data-tooltip="Supprimer">
+                                                <i class="material-icons">delete</i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                                {% if hasAccess('permissions.delete') %}
+                                    <td>
+                                        <input type="checkbox" name="data[delete][]" value="{{ permission.id }}"
+                                               class="filled-in" id="{{ permission.id }}"/>
+                                        <label for="{{ permission.id }}"></label>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <a class="right">
+                <p>Total : {{ total }} </p>
+            </a>
+        </div>
+
+        {% if hasAccess('permissions.create') or hasAccess('permissions.delete') %}
+            <div class="fixed-action-btn vertical" style="bottom: 45px; right: 24px;">
+                <a class="btn-floating btn-large blue-grey">
+                    <i class="material-icons">menu</i>
+                </a>
+                <ul>
+                    {% if hasAccess('permissions.create') %}
+                        <li>
+                            <a href="{{ url('admin.permissions.create') }}"
+                               class="btn-floating btn-large tooltipped blue"
+                               data-position="left" data-delay="150" data-tooltip="Ajouter une permission">
+                                <i class="material-icons">add</i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if hasAccess('permissions.delete') %}
+                        <li>
+                            <input type="submit" class="btn-floating btn-large tooltipped blue material-icons"
+                                   data-position="left" data-delay="150"
+                                   data-tooltip="Supprimer tous les éléments sélectionnés"
+                                   value='delete'
+                            />
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+    </form>
+
+{% endblock %}

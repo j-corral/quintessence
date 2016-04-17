@@ -1,2 +1,2 @@
-# quintessence
-Quintessence Framework
+# Quintessence Framework
+Perfection for innovation

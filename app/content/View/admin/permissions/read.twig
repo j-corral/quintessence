@@ -1,0 +1,46 @@
+{% extends _layout %}
+
+{% block title %}permission - {{ permission.auth_id }}{% endblock %}
+
+{% block content %}
+
+
+
+    <div class="col s12 m8 offset-m2 l6 offset-l3 ">
+        <div class="card-panel grey lighten-5 z-depth-1 flow-text">
+            <div class="col s10">
+                Information permission
+            </div>
+            <div class="col s10">
+                <div class="chip">
+                    Auth_id : {{ permission.auth_id }}
+                    Auth_id : {{ permission.permission }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% if hasAccess('permissions.update') or hasAccess('permissions.delete') %}
+        <div class="fixed-action-btn">
+            {% if hasAccess('permissions.update') %}
+                <a href="{{ url('admin.permissions.update', [permission.id]) }}"
+                   class="btn-floating btn-large tooltipped blue"
+                   data-position="top" data-delay="150" data-tooltip="Editer">
+                    <i class="large material-icons">edit</i>
+                </a>
+            {% endif %}
+            {% if hasAccess('permissions.delete') %}
+                <a href="{{ url('admin.permissions.delete', [permission.id]) }}"
+                   class="btn-floating btn-large tooltipped blue"
+                   data-position="top" data-delay="150" data-tooltip="Supprimer">
+                    <i class="large material-icons">delete</i>
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+
+

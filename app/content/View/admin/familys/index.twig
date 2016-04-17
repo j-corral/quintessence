@@ -1,0 +1,117 @@
+{% extends _layout %}
+
+{% block title %} Familys{% endblock %}
+
+{% block content %}
+
+    <h2>Liste des familles d'items</h2>
+
+    {{ material_pagination('admin.familys.index', page, nbPages, 'blue') }}
+
+    <form action="{{ url('admin.familys.deleteSelection') }}" method="post">
+        <div class="row">
+            <div class="col s12">
+                <div id="index">
+                    <table class="table responsive-table centered table-hover striped">
+                        <thead>
+                        <tr>
+                            <th data-field="action">Id
+                                <a href="{{ url('admin.familys.index', [page], ['perPage']) }}" class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier 0-9">
+                                    <i class="material-icons">keyboard_arrow_up</i>
+                                </a>
+                                <a href="{{ url('admin.familys.index', [page,'?orderby=id-desc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier 9-0">
+                                    <i class="material-icons">keyboard_arrow_down</i>
+                                </a>
+                            </th>
+                            <th data-field="action">Description
+                                <a href="{{ url('admin.familys.index', [page,'?orderby=description-asc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier A-Z">
+                                    <i class="material-icons">keyboard_arrow_up</i>
+                                </a>
+                                <a href="{{ url('admin.familys.index', [page,'?orderby=description-desc'], ['perPage']) }}"
+                                   class="tooltipped"
+                                   data-position="top" data-delay="150" data-tooltip="Trier Z-A">
+                                    <i class="material-icons">keyboard_arrow_down</i>
+                                </a>
+                            </th>
+                            {% if hasAccess('familys.read') or hasAccess('familys.update') or hasAccess('familys.delete') %}
+                                <th data-field="action">Action</th>
+                            {% endif %}
+                            {% if hasAccess('familys.delete') %}
+                                <th data-field="action">Sélection
+                                    <i class="material-icons">done_all</i>
+                                    <i class="material-icons">crop_square</i>
+                                </th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for family in familys %}
+                            <tr>
+                                <td>{{ family.id }}</td>
+                                <td>{{ family.description }}</td>
+                                {% if hasAccess('familys.read') or hasAccess('familys.update') or hasAccess('familys.delete') %}
+                                    <td>
+                                        {% if hasAccess('familys.read') %}
+                                            <a href="{{ url('admin.familys.read', [family.id]) }}" class="tooltipped"
+                                               data-position="top" data-delay="150" data-tooltip="Voir">
+                                                <i class="material-icons">visibility</i>
+                                            </a>
+                                        {% endif %}
+                                        {% if hasAccess('familys.update') %}
+                                            <a href="{{ url('admin.familys.update', [family.id]) }}" class="tooltipped"
+                                               data-position="top" data-delay="150" data-tooltip="Editer">
+                                                <i class="material-icons">create</i>
+                                            </a>
+                                        {% endif %}
+                                        {% if hasAccess('familys.delete') %}
+                                            <a href="{{ url('admin.familys.delete', [family.id]) }}" class="tooltipped"
+                                               data-position="top" data-delay="150" data-tooltip="Supprimer">
+                                                <i class="material-icons">delete</i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                                {% if hasAccess('familys.delete') %}
+                                    <td>
+                                        <input type="checkbox" name="data[delete][]" value="{{ family.id }}"
+                                               class="filled-in" id="{{ family.id }}"/>
+                                        <label for="{{ family.id }}"></label>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <a class="right">
+                <p>Total : {{ total }} </p>
+            </a>
+        </div>
+
+        {% if hasAccess('familys.create') or hasAccess('familys.delete') %}
+            <div class="fixed-action-btn add-btns">
+                {% if hasAccess('familys.create') %}
+                    <a href="{{ url('admin.familys.create') }}" class="btn-floating btn-large tooltipped blue"
+                       data-position="left"
+                       data-delay="150" data-tooltip="Ajouter une famille">
+                        <i class="large material-icons">add</i>
+                    </a>
+                {% endif %}
+                {% if hasAccess('familys.delete') %}
+                    <input type="submit" class="btn-floating btn-large tooltipped blue material-icons"
+                           data-position="left" data-delay="150" data-tooltip="Supprimer tous les éléments sélectionnés"
+                           value='delete'
+                    />
+                {% endif %}
+            </div>
+        {% endif %}
+    </form>
+{% endblock %}
