@@ -1,2 +1,2 @@
 # Quintessence Framework
-Perfection for innovation
+Perfect for innovation
